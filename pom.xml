@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.testannotation</groupId>
-	<artifactId>library-client</artifactId>
+	<artifactId>search-books</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>library-client</name>
-	<description>Small Library Client</description>
+	<name>search-books</name>
+	<description>Book Search Service</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

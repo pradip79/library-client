@@ -25,8 +25,7 @@ public class BookCatalogClient {
 
     public ResponseEntity<Book> getBookByIsbn(String isbn) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(bookCatalogServiceURL)
-                .path("/book/" + isbn);
-        System.out.println("Path: " + builder.toUriString());
+                .path("/book-catalog/book/" + isbn);
 
         ResponseEntity<Book> responseEntity = restTemplate.getForEntity(builder.toUriString(), Book.class);
         return responseEntity;
@@ -34,9 +33,7 @@ public class BookCatalogClient {
 
     public ResponseEntity<Book[]> getAllBooks() {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(bookCatalogServiceURL)
-                .path("/books");
-        System.out.println("Path: " + builder.toUriString());
-
+                .path("/book-catalog/books");
 
         ResponseEntity<Book[]> responseEntity = restTemplate.getForEntity(builder.toUriString(), Book[].class);
         return responseEntity;
