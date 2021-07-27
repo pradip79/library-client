@@ -1,13 +1,13 @@
-package com.testannotation.libraryclient;
+package com.testannotation.searchbooks;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LibraryClientApplication {
+public class SearchBooksApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LibraryClientApplication.class, args);
+		SpringApplication.run(SearchBooksApplication.class, args);
 	}
 
 }

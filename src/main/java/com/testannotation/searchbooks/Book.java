@@ -1,10 +1,27 @@
-package com.testannotation.libraryclient;
+package com.testannotation.searchbooks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Book {
+
+    private String isbn;
+    private String title;
+    private List<String> author = new ArrayList<>();
     private String genre;
     private String publisher;
+
+    public Book(){
+
+    }
+    public Book(String isbn, String title, List<String> author, String genre, String publisher) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.publisher = publisher;
+    }
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
@@ -14,16 +31,8 @@ public class Book {
         this.title = title;
     }
 
-    public void setAuthors(String authors) {
-        this.authors = authors;
-    }
-
-    private String isbn;
-    private String title;
-    private String authors;
-
-    public Book(){
-
+    public void setAuthor(List<String> author) {
+        this.author = author;
     }
 
     public String getGenre() {
@@ -42,14 +51,6 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Book(String isbn, String title, String authors, String publisher, String genre) {
-        this.isbn = isbn;
-        this.title = title;
-        this.authors = authors;
-        this.publisher = publisher;
-        this.genre = genre;
-    }
-
     public String getIsbn() {
         return isbn;
     }
@@ -58,25 +59,25 @@ public class Book {
         return title;
     }
 
-    public String getAuthors() {
-        return authors;
+    public List<String> getAuthor() {
+        return author;
     }
 
     @Override
     public String toString() {
-        return "ISBN: "+this.isbn+", Title: "+this.title+", Authors: "+this.authors+", Genre: "+this.genre+", Publisher:" +this.publisher;
+        return "ISBN: "+this.isbn+", Title: "+this.title+", Authors: "+this.author +", Genre: "+this.genre+", Publisher:" +this.publisher;
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this == o)
+        if (this == o)
             return true;
-        if(o == null || getClass() != o.getClass())
+        if (o == null || getClass() != o.getClass())
             return false;
         Book book = (Book) o;
 
         return Objects.equals(this.isbn, book.isbn) &&
-                Objects.equals(this.title, book.title) &&
-                Objects.equals(this.authors, book.authors);
+                Objects.equals(this.title, book.title);
     }
+
 }
