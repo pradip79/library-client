@@ -1,7 +1,6 @@
 package com.testannotation.searchbooks;
 
 import au.com.dius.pact.consumer.MockServer;
-import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 @PactTestFor(providerName = "book-catalog", port = "7071")
@@ -23,7 +21,7 @@ public class BookCatalogConsumerPactTest {
 
     @Pact(consumer = "search-books", provider = "book-catalog")
     RequestResponsePact getOneBook(PactDslWithProvider pactBuilder){
-        return pactBuilder.given("book with ISBN 101201 available")
+        return pactBuilder.given("book with ISBN 101201 exists")
                 .uponReceiving("get one book")
                 .method("GET")
                 .path("/book-catalog/book/101201")
