@@ -26,31 +26,28 @@ public class DSLTester {
 
         //System.out.println("Body:"+ body);
 
-        LambdaDslJsonBody lambdaBody = newJsonBody((o)-> {
-            o.stringType("name", "John Smart");
-            o.array("addresses", (p) -> {
-                p.object(q -> {
-                    q.stringType("type", "home");
-                    q.stringType("street", "12 Foreshore Road");
-                    q.stringType("city", "Philadelphia");
+        LambdaDslJsonBody lambdaBody = newJsonBody((root)-> {
+            root.minArrayLike("Actors", 2, (actor)->{
+                actor.stringType("name", "Tom Cruise");
+                actor.numberType("age", 56);
+                actor.date("birthDate", "dd MMMM yyyy");
+                actor.stringType("photo", "https://jsonformatter.org/img/tom-cruise.jpg");
+                actor.array("children", (child)->{
+                    child.stringType("Suri");
+                    child.stringType("Isabella");
                 });
-            });
-            o.array("cars", (c) -> {
-                c.stringValue("Ford");
-                c.stringValue("BMW");
             });
         });
 
-        newJsonArray((rootArray) -> {
-            rootArray.array((a) -> a.stringValue("a1").stringValue("a2"));
-            rootArray.array((a) -> a.numberValue(1).numberValue(2));
-            rootArray.array((a) -> a.object((o) -> o.stringValue("foo", "Foo")));
-        }).build();
 
         System.out.println(lambdaBody.build());
 
 
-
+        body = new PactDslJsonArray()
+                .arrayEachLike(3)
+                    .integerType("isbn")
+                .closeObject();
+        System.out.println(body);
 
 
     }

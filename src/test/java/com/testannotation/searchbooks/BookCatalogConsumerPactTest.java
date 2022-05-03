@@ -1,10 +1,7 @@
 package com.testannotation.searchbooks;
 
 import au.com.dius.pact.consumer.MockServer;
-import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
-import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
-import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
-import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
+import au.com.dius.pact.consumer.dsl.*;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.RequestResponsePact;
@@ -60,6 +57,31 @@ public class BookCatalogConsumerPactTest {
                 .toPact();
     }
 
+    @Pact(consumer = "search-books", provider = "book-catalog")
+    RequestResponsePact searchForBooks(PactDslWithProvider pactBuilder){
+        DslPart body = new PactDslJsonArray()
+                .arrayEachLike(2)
+                    .stringType("isbn")
+                .closeObject();
+        return pactBuilder.given("books exist")
+                .uponReceiving("search for books")
+                .method("POST")
+                .path("/book-catalog/books")
+                .headers("Content-Type", "application/json")
+                .body(body)
+                .willRespondWith()
+                .status(200)
+                .headers(Map.of("Content-Type", "application/json"))
+                .body(PactDslJsonArray
+                        .arrayEachLike(3)
+                        .stringType("isbn", "101201")
+                        .stringType("title", "The Alchemist")
+                        .minArrayLike("authors", 1, PactDslJsonRootValue.stringType("Paolo Coelho"))
+                        .stringType("publisher")
+                        .stringType("genre", "Fiction"))
+                .toPact();
+    }
+
     @Test
     @PactTestFor(pactMethod = "getOneBook")
     void getBookByISBN_shouldReturn_singleBook(MockServer mockServer){
@@ -85,6 +107,19 @@ public class BookCatalogConsumerPactTest {
                 new Book("101201", "The Alchemist", Arrays.asList("Paolo Coelho"), "Fiction", "HarperCollins"));
 
         List<Book> actualBooks = Arrays.asList(bookCatalogClient.getAllBooks().getBody());
+
+        assertEquals(expectedBooks, actualBooks);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "searchForBooks")
+    void searchBooks_byMultipleISBN_shouldReturn_listOfBooks(MockServer mockServer){
+        bookCatalogClient = new BookCatalogClient(mockServer.getUrl());
+        List<Book> expectedBooks = List.of(new Book("101201", "The Alchemist", Arrays.asList("Paolo Coelho"), "Fiction", "HarperCollins"),
+                new Book("101201", "The Alchemist", Arrays.asList("Paolo Coelho"), "Fiction", "HarperCollins"),
+                new Book("101201", "The Alchemist", Arrays.asList("Paolo Coelho"), "Fiction", "HarperCollins"));
+        String body = "[{\"isbn\": \"101201\"}, {\"isbn\": \"101201\"}]";
+        List<Book> actualBooks = Arrays.asList(bookCatalogClient.searchBooksByISBNs(body).getBody());
 
         assertEquals(expectedBooks, actualBooks);
     }

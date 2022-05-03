@@ -2,6 +2,9 @@ package com.testannotation.searchbooks;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +35,16 @@ public class BookCatalogClient {
                 .path("/book-catalog/books");
 
         ResponseEntity<Book[]> responseEntity = restTemplate.getForEntity(builder.toUriString(), Book[].class);
+        return responseEntity;
+    }
+
+    public ResponseEntity<Book[]> searchBooksByISBNs(String jsonBody) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(bookCatalogServiceURL)
+                .path("/book-catalog/books");
+
+        ResponseEntity<Book[]> responseEntity = restTemplate.postForEntity(builder.toUriString(), new HttpEntity<>(jsonBody, httpHeaders), Book[].class);
         return responseEntity;
     }
 }
